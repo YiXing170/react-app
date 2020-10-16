@@ -31,12 +31,12 @@ const LoadingWrapper = styled.div`
   }
 `
 
-function Loading () {
+function Loading (props) {
   return (
-    <LoadingWrapper>
+    props.show ? <LoadingWrapper>
       <div></div>
       <div></div>
-    </LoadingWrapper>
+    </LoadingWrapper> : null
   );
 }
 
