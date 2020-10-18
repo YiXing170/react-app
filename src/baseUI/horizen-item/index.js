@@ -47,7 +47,7 @@ function Horizen (props) {
     });
     categoryDOM.style.width = `${totalWidth}px`;
   }, []);
-
+  // console.log(oldVal)
   return (
     <Scroll direction={"horizental"}>
       <div ref={Category}>
