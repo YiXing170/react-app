@@ -18,6 +18,7 @@ function App () {
       <HashRouter>
         <GlobalStyle></GlobalStyle>
         <IconStyle></IconStyle>
+        {/* data为缓存数据组件 */}
         <Data>
           {renderRoutes(routes)}
         </Data>
