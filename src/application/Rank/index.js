@@ -19,7 +19,6 @@ function Rank (props) {
 
   let rankList = list ? list.toJS() : [];
 
-
   //获取数据，有缓存  
   useEffect(() => {
     if (!rankList.length) {

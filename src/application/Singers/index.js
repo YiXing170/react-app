@@ -23,6 +23,7 @@ import LazyLoad, { forceCheck } from 'react-lazyload';
 import Loading from '../../baseUI/loading';
 
 import { CategoryDataContext, CHANGE_ALPHA, CHANGE_CATEGORY } from './data'
+import { renderRoutes } from 'react-router-config';
 
 function Singers (props) {
   // let [category, setCategory] = useState('');
@@ -63,6 +64,10 @@ function Singers (props) {
     pullDownRefreshDispatch(category, alpha);
   };
 
+  const enterDetail = (id) => {
+    props.history.push(`/singers/${id}`);
+  };
+
 
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
@@ -73,7 +78,7 @@ function Singers (props) {
         {
           list.map((item, index) => {
             return (
-              <ListItem key={item.accountId + "" + index}>
+              <ListItem onClick={() => enterDetail(item.id)} key={item.accountId + "" + index}>
                 <div className="img_wrapper">
                   <LazyLoad placeholder={<img width="100%" height="100%" src={require('./music.png')} alt="music" />}>
                     <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music" />
@@ -106,6 +111,7 @@ function Singers (props) {
         </Scroll>
         <Loading show={enterLoading}></Loading>
       </ListContainer>
+      {renderRoutes(props.route.routes)}
     </div>
 
   )
