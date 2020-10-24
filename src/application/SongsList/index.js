@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { SongList, SongItem } from "./style";
 import { getName } from '../../api/utils';
 
