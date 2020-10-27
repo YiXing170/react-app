@@ -7,10 +7,12 @@ import {
   Bottom,
   Operators,
   CDWrapper,
+  ProgressWrapper
 } from "./style";
 import animations from "create-keyframe-animation";
 import { prefixStyle } from "../../../api/utils";
 import { CSSTransition } from 'react-transition-group'
+import ProgressBar from "baseUI/process-bar/index";
 
 function NormalPlayer (props) {
 
@@ -112,6 +114,7 @@ function NormalPlayer (props) {
             alt="歌曲图片"
           />
         </div>
+
         <div className="background layer"></div>
         <Top className="top">
           <div className="back" onClick={() => toggleFullScreen(false)}>
@@ -131,7 +134,15 @@ function NormalPlayer (props) {
             </div>
           </CDWrapper>
         </Middle>
+
         <Bottom className="bottom">
+          <ProgressWrapper>
+            <span className="time time-l">0:00</span>
+            <div className="progress-bar-wrapper">
+              <ProgressBar percent={0.2}></ProgressBar>
+            </div>
+            <div className="time time-r">4:17</div>
+          </ProgressWrapper>
           <Operators>
             <div className="icon i-left" >
               <i className="iconfont">&#xe625;</i>
@@ -150,6 +161,7 @@ function NormalPlayer (props) {
             </div>
           </Operators>
         </Bottom>
+
       </NormalPlayerContainer>
     </CSSTransition>
 
