@@ -45,9 +45,22 @@ function ProgressBar (props) {
   const [touch, setTouch] = useState({});
 
   const progressBtnWidth = 8;
+  const transform = prefixStyle('transform');
 
-  // 取出回调函数
+  const { percent } = props;
+
   const { percentChange } = props;
+
+  //监听percent
+  useEffect(() => {
+    if (percent >= 0 && percent <= 1 && !touch.initiated) {
+      const barWidth = progressBar.current.clientWidth - progressBtnWidth;
+      const offsetWidth = percent * barWidth;
+      progress.current.style.width = `${offsetWidth}px`;
+      progressBtn.current.style[transform] = `translate3d(${offsetWidth}px, 0, 0)`;
+    }
+    // eslint-disable-next-line
+  }, [percent]);
 
   const _changePercent = () => {
     const barWidth = progressBar.current.clientWidth - progressBtnWidth;
@@ -85,12 +98,14 @@ function ProgressBar (props) {
     const endTouch = JSON.parse(JSON.stringify(touch));
     endTouch.initiated = false;
     setTouch(endTouch);
+    _changePercent();
   }
   const progressClick = (e) => {
     const rect = progressBar.current.getBoundingClientRect();
     const barWidth = progressBar.current.clientWidth - progressBtnWidth;
     const offsetWidth = Math.min(Math.max(0, e.pageX - rect.left), barWidth);
     _offset(offsetWidth);
+    _changePercent();
   };
 
   return (
