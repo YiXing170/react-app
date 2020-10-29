@@ -11,6 +11,8 @@ import { actionCreators } from './store/'
 import { isEmptyObject } from 'api/utils'
 
 import Loading from 'baseUI/loading/index';
+import MusicNote from "../../baseUI/music-note/index";
+import SongsList from 'application/SongsList/'
 
 export const HEADER_HEIGHT = 45;
 
@@ -24,6 +26,12 @@ function Album (props) {
   const { currentAlbum: currentAlbumImmutable, enterLoading } = props;
   // console.log(enterLoading)
   const { getAlbumDataDispatch, clearAlbums } = props;
+
+  const musicNoteRef = useRef();
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
 
   useEffect(() => {
     getAlbumDataDispatch(id);
@@ -112,8 +120,8 @@ function Album (props) {
                     <i className="iconfont">&#xe606;</i>更多
             </div>
                 </Menu>
-                <SongList>
-                  <div className="first_line">
+                <SongList musicAnimation={musicAnimation}>
+                  {/* <div className="first_line">
                     <div className="play_all">
                       <i className="iconfont">&#xe6e3;</i>
                       <span > 播放全部 <span className="sum">(共 {currentAlbum.tracks.length} 首)</span></span>
@@ -122,8 +130,8 @@ function Album (props) {
                       <i className="iconfont">&#xe62d;</i>
                       <span > 收藏 ({getCount(currentAlbum.subscribedCount)})</span>
                     </div>
-                  </div>
-                  <SongItem>
+                  </div> */}
+                  {/* <SongItem>
                     {
                       currentAlbum.tracks.map((item, index) => {
                         return (
@@ -139,11 +147,19 @@ function Album (props) {
                         )
                       })
                     }
-                  </SongItem>
+                  </SongItem> */}
+                  <SongsList
+                    songs={currentAlbum.tracks}
+                    showCollect={true}
+                    collectCount={currentAlbum.subscribedCount}
+                    showBackground={true}
+                    musicAnimation={musicAnimation}>
+                  </SongsList>
                 </SongList>
               </div>
             </Scroll>
         }
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   )

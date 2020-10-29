@@ -111,10 +111,11 @@ function Player (props) {
 
   //记录当前的歌曲，以便于下次重渲染时比对是否是一首歌
   const [preSong, setPreSong] = useState({});
+
   //先mock一份currentIndex
-  useEffect(() => {
-    changeCurrentIndexDispatch(0);
-  }, [])
+  // useEffect(() => {
+  //   changeCurrentIndexDispatch(0);
+  // }, [])
 
   useEffect(() => {
     if (
@@ -135,6 +136,7 @@ function Player (props) {
     setCurrentTime(0);//从头开始播放
     setDuration((current.dt / 1000) | 0);//时长
   }, [playList, currentIndex]);
+
 
 
   useEffect(() => {
@@ -172,21 +174,7 @@ function Player (props) {
 
 
 
-  //mock一份playList，后面直接从 redux 拿，现在只是为了调试播放效果。
 
-  useEffect(() => {
-    if (!currentSong) return;
-    changeCurrentIndexDispatch(0);//currentIndex默认为-1，临时改成0
-    let current = playList[0];
-    changeCurrentDispatch(current);//赋值currentSong
-    audioRef.current.src = getSongUrl(current.id);
-    setTimeout(() => {
-      audioRef.current.play();
-    });
-    togglePlayingDispatch(true);//播放状态
-    setCurrentTime(0);//从头开始播放
-    setDuration((current.dt / 1000) | 0);//时长
-  }, []);
 
   const handleEnd = () => {
     if (mode === playMode.loop) {
