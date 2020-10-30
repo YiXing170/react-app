@@ -116,21 +116,26 @@ function Player (props) {
   // useEffect(() => {
   //   changeCurrentIndexDispatch(0);
   // }, [])
+  const songReady = useRef(true);
 
   useEffect(() => {
     if (
       !playList.length ||
       currentIndex === -1 ||
       !playList[currentIndex] ||
-      playList[currentIndex].id === preSong.id
+      playList[currentIndex].id === preSong.id ||
+      !songReady.current// 标志位为 false
     )
       return;
     let current = playList[currentIndex];
     changeCurrentDispatch(current);//赋值currentSong
+    songReady.current = false; // 把标志位置为 false, 表示现在新的资源没有缓冲完成，不能切歌
     setPreSong(current);
     audioRef.current.src = getSongUrl(current.id);
     setTimeout(() => {
-      audioRef.current.play();
+      audioRef.current.play().then(() => {
+        songReady.current = true;
+      })
     });
     togglePlayingDispatch(true);//播放状态
     setCurrentTime(0);//从头开始播放
@@ -143,7 +148,10 @@ function Player (props) {
     playing ? audioRef.current.play() : audioRef.current.pause();
   }, [playing]);
 
-
+  const handleError = () => {
+    songReady.current = true;
+    alert("播放出错");
+  };
 
   const changeMode = () => {
     let newMode = (mode + 1) % 3;
@@ -219,7 +227,7 @@ function Player (props) {
         ref={audioRef}
         onTimeUpdate={updateTime}
         onEnded={handleEnd}
-      // onError={handleError}
+        onError={handleError}
       ></audio>
       <Toast text={modeText} ref={toastRef}></Toast>
     </div>

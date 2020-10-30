@@ -23,7 +23,7 @@ function Album (props) {
   const [title, setTitle] = useState("歌单");
 
   const id = props.match.params.id;
-  const { currentAlbum: currentAlbumImmutable, enterLoading } = props;
+  const { currentAlbum: currentAlbumImmutable, enterLoading, songsCount } = props;
   // console.log(enterLoading)
   const { getAlbumDataDispatch, clearAlbums } = props;
 
@@ -75,7 +75,7 @@ function Album (props) {
       unmountOnExit
       onExited={props.history.goBack}
     >
-      <Container>
+      <Container play={songsCount}>
         <Header ref={headerEl} title={title} handleClick={handleBack} isMarquee={isMarquee}></Header>
         {/* // 这里是具体布局 JSX 代码 */}
         {/* {enterLoading ? <Loading></Loading> : null} */}
@@ -168,6 +168,7 @@ function Album (props) {
 const mapStateToProps = (state) => ({
   currentAlbum: state.getIn(['album', 'currentAlbum']),
   enterLoading: state.getIn(['album', 'enterLoading']),
+  songsCount: state.getIn(['player', 'playList']).size
 })
 const mapDispatchToProps = (dispatch) => {
   return {

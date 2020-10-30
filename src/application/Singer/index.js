@@ -82,6 +82,7 @@ function Singer (props) {
     artist: immutableArtist,
     songs: immutableSongs,
     loading,
+    songsCount
   } = props;
 
   useEffect(() => {
@@ -110,7 +111,7 @@ function Singer (props) {
       unmountOnExit
       onExited={() => props.history.goBack()}
     >
-      <Container>
+      <Container play={songsCount}>
         <Loading show={loading}></Loading>
         <Header
           handleClick={setShowStatusFalse}
@@ -146,6 +147,7 @@ const mapStateToProps = state => ({
   artist: state.getIn(["singerInfo", "artist"]),
   songs: state.getIn(["singerInfo", "songsOfArtist"]),
   loading: state.getIn(["singerInfo", "loading"]),
+  songsCount: state.getIn(['player', 'playList']).size
 });
 // 映射 dispatch 到 props 上
 const mapDispatchToProps = dispatch => {
