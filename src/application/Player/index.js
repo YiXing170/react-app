@@ -15,7 +15,7 @@ import { getSongUrl } from "../../api/utils";
 import { isEmptyObject, findIndex, shuffle } from "../../api/utils";
 import Toast from "baseUI/toast/index";
 import { playMode } from '../../api/config';
-
+import PlayList from "./playList/index";
 
 function Player (props) {
   // const currentSong = {
@@ -39,7 +39,8 @@ function Player (props) {
     changeCurrentDispatch,
     changePlayListDispatch,//改变playList
     changeModeDispatch,//改变mode
-    toggleFullScreenDispatch
+    toggleFullScreenDispatch,
+    togglePlayListDispatch
   } = props;
 
   const playList = immutablePlayList.toJS();
@@ -197,6 +198,7 @@ function Player (props) {
     <div>
       { isEmptyObject(currentSong) ? null :
         <MiniPlayer
+          togglePlayList={togglePlayListDispatch}
           song={currentSong}
           fullScreen={fullScreen}
           playing={playing}
@@ -208,6 +210,7 @@ function Player (props) {
       { isEmptyObject(currentSong) ? null :
 
         <NormalPlayer
+          togglePlayList={togglePlayListDispatch}
           song={currentSong}
           fullScreen={fullScreen}
           playing={playing}
@@ -223,6 +226,7 @@ function Player (props) {
           changeMode={changeMode}
         />
       }
+      <PlayList clearPreSong={setPreSong.bind(null, {})}></PlayList>
       <audio
         ref={audioRef}
         onTimeUpdate={updateTime}
