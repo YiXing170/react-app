@@ -162,7 +162,7 @@ function PlayList (props) {
     } else {
       // 否则反弹回去
       listWrapperRef.current.style["transition"] = "all 0.3s";
-      listWrapperRef.current.style[transform] = `translate3d (0px, 0px, 0px)`;
+      listWrapperRef.current.style[transform] = `translate3d(0px, 0px, 0px)`;
     }
   };
 
