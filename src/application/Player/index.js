@@ -17,6 +17,8 @@ import Toast from "baseUI/toast/index";
 import { playMode } from '../../api/config';
 import PlayList from "./playList/index";
 import { getLyricRequest } from '../../api/request'
+import Lyric from './../../api/lyric-parser';
+
 
 function Player (props) {
   // const currentSong = {
@@ -66,6 +68,9 @@ function Player (props) {
   const clickPlaying = (e, state) => {
     e.stopPropagation();
     togglePlayingDispatch(state);
+    if (currentLyric.current) {
+      currentLyric.current.togglePlay(currentTime * 1000);
+    }
   };
   const updateTime = e => {
     setCurrentTime(e.target.currentTime);
@@ -77,6 +82,9 @@ function Player (props) {
     audioRef.current.currentTime = newTime;
     if (!playing) {
       togglePlayingDispatch(true);
+    }
+    if (currentLyric.current) {
+      currentLyric.current.seek(newTime * 1000);
     }
   };
 
@@ -116,16 +124,30 @@ function Player (props) {
 
   // 在组件内部编写
   const currentLyric = useRef();
+  const currentLineNum = useRef(0);
+  const [currentPlayingLyric, setPlayingLyric] = useState("");
+  const handleLyric = ({ lineNum, txt }) => {
+    if (!currentLyric.current) return;
+    currentLineNum.current = lineNum;
+    setPlayingLyric(txt);
+  };
   const getLyric = id => {
     let lyric = "";
+    if (currentLyric.current) {
+      currentLyric.current.stop();
+    }
+    // 避免 songReady 恒为 false 的情况
     getLyricRequest(id)
       .then(data => {
-        console.log(data)
         lyric = data.lrc.lyric;
         if (!lyric) {
           currentLyric.current = null;
           return;
         }
+        currentLyric.current = new Lyric(lyric, handleLyric);
+        currentLyric.current.play();
+        currentLineNum.current = 0;
+        currentLyric.current.seek(0);
       })
       .catch(() => {
         songReady.current = true;
@@ -247,6 +269,9 @@ function Player (props) {
           handleNext={handleNext}
           mode={mode}
           changeMode={changeMode}
+          currentLyric={currentLyric.current}
+          currentPlayingLyric={currentPlayingLyric}
+          currentLineNum={currentLineNum.current}
         />
       }
       <PlayList clearPreSong={setPreSong.bind(null, {})}></PlayList>
